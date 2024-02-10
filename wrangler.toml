@@ -1,0 +1,10 @@
+name = "hono-cloudflare-r2"
+compatibility_date = "2023-12-01"
+main = "src/index.js"
+
+# [vars]
+# MY_VARIABLE = "production_value"
+
+[[r2_buckets]]
+binding = "MY_BUCKET"
+bucket_name = "blog"
