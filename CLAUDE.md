@@ -29,18 +29,19 @@ This runs `wrangler deploy --minify src/index.ts` to deploy the worker to produc
 
 **File Structure:**
 - `src/index.ts`: Main application entry point with route definitions
-- `src/config.ts`: Configuration constants (HOST and TOKEN)
-- `wrangler.toml`: Cloudflare Workers configuration including R2 bucket binding
+- `src/config.ts`: (deprecated) Legacy configuration file, no longer used
+- `wrangler.toml`: Cloudflare Workers configuration including R2 bucket binding and variables
 
 **Key Components:**
 
-1. **Environment Bindings** (defined in `src/index.ts:7-11`):
+1. **Environment Bindings** (defined in `src/index.ts:6-10`):
    - `MY_BUCKET`: R2Bucket binding for file storage
-   - `USERNAME`, `PASSWORD`: (declared but not currently used)
+   - `TOKEN`: Secret token for Bearer authentication (configured via Cloudflare Secrets)
+   - `HOST`: Public domain URL for serving images (configured via Cloudflare Variables)
 
 2. **Authentication**:
    - Bearer token auth middleware applied to all `/api/*` routes
-   - Token configured in `src/config.ts`
+   - Token configured via Cloudflare Workers Secrets (not hardcoded in source code)
 
 3. **Upload Flow** (`POST /api/v1/upload`):
    - Accepts multipart form data with a `file` field
@@ -52,15 +53,34 @@ This runs `wrangler deploy --minify src/index.ts` to deploy the worker to produc
 
 **Required Setup:**
 
-1. Update `wrangler.toml` with your Cloudflare account details:
+1. **Update `wrangler.toml`**:
    - Set correct `bucket_name` for your R2 bucket
 
-2. Update `src/config.ts`:
-   - `HOST`: Your public domain for serving images
-   - `TOKEN`: Secret bearer token for API authentication
+2. **Set Cloudflare Secrets** (for production):
+   ```bash
+   wrangler secret put HOST
+   wrangler secret put TOKEN
+   ```
+   When prompted, enter:
+   - HOST: Your public domain (e.g., `https://pic.domain.com/`)
+   - TOKEN: Your secret bearer token for API authentication
 
-**R2 Bucket Binding:**
-The app expects an R2 bucket bound as `MY_BUCKET` (configured in `wrangler.toml:8-10`). All uploads are stored under the `images/` prefix.
+3. **For local development** (optional):
+   Create a `.dev.vars` file in the project root:
+   ```
+   HOST=https://pic.domain.com/
+   TOKEN=your-local-dev-token
+   ```
+   This file should be added to `.gitignore` (secrets should never be committed).
+
+**Environment Variables:**
+- `HOST` (Secret): Public domain URL for serving images - set via `wrangler secret put HOST`
+- `TOKEN` (Secret): Bearer token for API authentication - set via `wrangler secret put TOKEN`
+- `MY_BUCKET` (R2 Binding): R2 bucket for file storage - configured in `wrangler.toml`
+
+All uploads are stored under the `images/` prefix in the R2 bucket.
+
+**For detailed configuration instructions, see `docs/CONFIGURATION.md`.**
 
 ## API Endpoints
 

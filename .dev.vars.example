@@ -1,0 +1,9 @@
+# Local development environment variables
+# Copy this file to .dev.vars and fill in your values
+# .dev.vars should be added to .gitignore (never commit secrets!)
+
+# Bearer token for API authentication
+TOKEN=your-local-dev-token
+
+# Public domain URL for serving images (must end with /)
+HOST=https://pic.domain.com/

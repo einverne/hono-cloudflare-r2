@@ -2,8 +2,12 @@ name = "hono-cloudflare-r2"
 compatibility_date = "2023-12-01"
 main = "src/index.js"
 
-# [vars]
-# MY_VARIABLE = "production_value"
+# Secrets (sensitive, set via wrangler CLI or Cloudflare Dashboard)
+# Set these secrets before deploying:
+#   wrangler secret put HOST
+#   wrangler secret put TOKEN
+#
+# Don't put actual secrets here! They should only be set via CLI or Dashboard.
 
 [[r2_buckets]]
 binding = "MY_BUCKET"
