@@ -1,6 +1,6 @@
 name = "hono-cloudflare-r2"
 compatibility_date = "2023-12-01"
-main = "src/index.js"
+main = "src/index.ts"
 
 # Secrets (sensitive, set via wrangler CLI or Cloudflare Dashboard)
 # Set these secrets before deploying:
