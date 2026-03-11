@@ -4,7 +4,7 @@
     "deploy": "wrangler deploy --minify src/index.ts"
   },
   "dependencies": {
-    "dotenv": "^16.6.1",
+    "dotenv": "^17.3.1",
     "hono": "^4.12.7",
     "nanoid": "^5.1.6"
   },
