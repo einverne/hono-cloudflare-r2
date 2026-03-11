@@ -43,14 +43,26 @@ app.post('/api/v1/upload', async (c) => {
         return c.text('Server configuration error: HOST not set', 500)
     }
 
-    const key = nanoid(10)
     const formData = await c.req.parseBody()
     const file = formData['file']
+    const keepName = formData['keep_name'] === 'true'
     if (file instanceof File) {
         const fileBuffer = await file.arrayBuffer()
         const fullName = file.name
         const ext = fullName.split('.').pop()
-        const path = `images/${key}.${ext}`
+        const nameWithoutExt = fullName.substring(0, fullName.lastIndexOf('.'))
+
+        let path: string
+        if (keepName && nameWithoutExt) {
+            path = `images/${nameWithoutExt}.${ext}`
+            const existing = await c.env.MY_BUCKET.head(path)
+            if (existing) {
+                path = `images/${nameWithoutExt}_${nanoid(6)}.${ext}`
+            }
+        } else {
+            path = `images/${nanoid(10)}.${ext}`
+        }
+
         await c.env.MY_BUCKET.put(path, fileBuffer)
         return c.json({
             'image': {

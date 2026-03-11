@@ -4,12 +4,12 @@
     "deploy": "wrangler deploy --minify src/index.ts"
   },
   "dependencies": {
-    "dotenv": "^16.4.1",
-    "hono": "^4.0.0",
-    "nanoid": "^5.0.5"
+    "dotenv": "^16.6.1",
+    "hono": "^4.12.7",
+    "nanoid": "^5.1.6"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20240208.0",
-    "wrangler": "^4.60.0"
+    "@cloudflare/workers-types": "^4.20260310.1",
+    "wrangler": "^4.72.0"
   }
 }
